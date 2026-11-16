@@ -170,7 +170,7 @@ src/homeguard/
 tests/                  # pytest; system commands and network are simulated
 examples/               # intentionally vulnerable demo dependencies and a sample report
 .claude/skills/homeguard/SKILL.md   # Claude Code skill
-.github/workflows/ci.yml            # CI: ruff + macOS/Ubuntu x Python 3.9/3.11/3.13 + CLI smoke test
+.github/workflows/ci.yml            # CI: ruff + macOS (Python 3.9/3.11/3.13) and Ubuntu (3.11/3.13) + CLI smoke test
 ```
 
 To add a port rule, append a `ServiceRule` to `_RULE_LIST` in `checks/services.py`. To add a local check, write `check_xxx(runner, opts)` in `checks/macos.py`, add it to `CHECKS`, and cover both the passing and failing output with `FakeRunner` in `tests/test_macos.py`.
