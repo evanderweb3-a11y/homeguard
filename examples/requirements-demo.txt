@@ -1,0 +1,6 @@
+# Demo only: old versions with known vulnerabilities, pinned on purpose to show the dependency check. Do not install!
+requests==2.19.0
+urllib3==1.24.1
+jinja2==2.10
+idna==3.7
+flask>=2.0

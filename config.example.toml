@@ -1,0 +1,31 @@
+# homeguard example configuration
+# Copy to homeguard.toml (current directory) or ~/.config/homeguard/config.toml and edit.
+# homeguard.toml is in .gitignore so your home network ranges are not committed.
+
+[general]
+output_dir = "reports"          # report output directory
+formats = ["md", "html"]        # any of: md / html / json
+fail_on = "high"                # exit code 1 when a problem at or above this level exists: critical/high/medium/low/none
+
+[local]
+enabled = true
+min_macos_major = 15            # major versions below this are treated as no longer receiving security updates
+check_pending_updates = false   # run `softwareupdate -l` (slow, needs network)
+
+[network]
+enabled = false                 # set to true so `homeguard all` scans the LAN
+targets = ["192.168.1.0/24"]    # private ranges only (10/8, 172.16/12, 192.168/16, 169.254/16, 127/8)
+# Ranges you declare as yours. When targets are fully covered here, no interactive prompt is shown;
+# otherwise every scan asks for confirmation.
+authorized_networks = ["192.168.1.0/24"]
+timeout = 0.6                   # per-port connect timeout (seconds)
+workers = 128                   # concurrent connections (max 256)
+max_hosts = 1024                # addresses per scan (hard maximum 4096)
+extra_ports = []                # extra ports to check, e.g. [8123, 9000]
+resolve_names = true            # reverse DNS lookups
+
+[deps]
+enabled = false
+paths = ["~/code"]              # directories searched recursively for lock files (node_modules, .venv etc. skipped)
+offline = false                 # true: identify dependencies only, no network queries
+osv_url = "https://api.osv.dev"

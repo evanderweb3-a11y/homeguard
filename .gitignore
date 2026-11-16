@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv*/
+venv/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Reports may contain your home devices' IPs/MACs/host names; never commit them
+reports/
+*.report.html
+homeguard-report-*
+
+# Local config (contains your network ranges); only config.example.toml is committed
+config.toml
+homeguard.toml
+
+# macOS / IDE
+.DS_Store
+.idea/
+.vscode/

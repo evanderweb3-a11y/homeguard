@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e ".[dev]"
+      - run: ruff check .
+      - run: ruff format --check .
+
+  test:
+    needs: lint
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, ubuntu-latest]
+        python-version: ["3.9", "3.11", "3.13"]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: python -m pip install --upgrade pip
+      - run: pip install -e ".[dev]"
+      - run: pytest -v
+      # Smoke test: the CLI runs (local checks + offline dependency parsing + loopback-only scan); no network, no external targets
+      - name: CLI smoke test
+        run: |
+          homeguard --version
+          homeguard list-checks
+          homeguard local -o smoke --fail-on none -f md,html,json
+          homeguard deps examples --offline -o smoke --fail-on none -f md
+          homeguard lan 127.0.0.1 --i-own-these-targets --no-resolve -o smoke --fail-on none -f json
+          ls -la smoke
